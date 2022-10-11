@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  db:
+    build: ./mysql
+    environment:
+      TZ: "Asia/Tokyo"
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: docker_php_mysql
+      MYSQL_USER: docker_php_mysql_user
+      MYSQL_PASSWORD: pass
+    volumes:
+      - db-data:/var/lib/mysql
+  php:
+    build: ./php
+    depends_on:
+      - db
+    ports:
+      - 8101:8000
+    volumes:
+      - ./work:/work
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+      - 8102:80
+
+volumes:
+  db-data:
